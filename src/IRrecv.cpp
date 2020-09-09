@@ -844,10 +844,6 @@ bool IRrecv::decode(decode_results *results, irparams_t *save,
     DPRINTLN("Attempting Carrier 64bit decode");
     if (decodeCarrierAC64(results, offset)) return true;
 #endif  // DECODE_CARRIER_AC64
-#if DECODE_TECHNIBEL_AC
-    DPRINTLN("Attempting Technibel AC decode");
-    if (decodeTechnibelAc(results, offset)) return true;
-#endif  // DECODE_TECHNIBEL_AC
 #if DECODE_CORONA_AC
     DPRINTLN("Attempting CoronaAc decode");
     if (decodeCoronaAc(results, offset)) return true;
@@ -864,18 +860,11 @@ bool IRrecv::decode(decode_results *results, irparams_t *save,
     DPRINTLN("Attempting Sanyo AC decode");
     if (decodeSanyoAc(results, offset)) return true;
 #endif  // DECODE_SANYO_AC
-#if DECODE_VOLTAS
-  DPRINTLN("Attempting Voltas decode");
-  if (decodeVoltas(results)) return true;
-#endif  // DECODE_VOLTAS
-#if DECODE_METZ
-    DPRINTLN("Attempting Metz decode");
-    if (decodeMetz(results, offset)) return true;
-#endif  // DECODE_METZ
+
 #if DECODE_TRANSCOLD
-    DPRINTLN("Attempting Transcold decode");
-    if (decodeTranscold(results, offset)) return true;
-#endif  // DECODE_TRANSCOLD
+  DPRINTLN("Attempting Transcold decode");
+  if (decodeTranscold(results, offset)) return true;
+#endif
   // Typically new protocols are added above this line.
   }
 #if DECODE_HASH
@@ -1665,6 +1654,7 @@ uint16_t IRrecv::matchManchesterData(volatile const uint16_t *data_ptr,
     }
     nr_half_periods++;
   }
+
 
   // Clean up and process the data.
   if (!MSBfirst) data = reverseBits(data, nbits);

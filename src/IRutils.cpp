@@ -166,7 +166,6 @@ bool hasACState(const decode_type_t protocol) {
     case TCL112AC:
     case TOSHIBA_AC:
     case TROTEC:
-    case VOLTAS:
     case WHIRLPOOL_AC:
       return true;
     default:
@@ -318,7 +317,23 @@ String resultToHexidecimal(const decode_results * const result) {
     output += uint64ToString(result->value, 16);
   }
   return output;
-}
+} 
+/*uint16_t resultToHexidecimal(const decode_results * const result) {
+  uint16_t output  ;//F("0x");
+  // Reserve some space for the string to reduce heap fragmentation.
+  output.reserve(2 * kStateSizeMax + 2);  // Should cover worst cases.
+  if (hasACState(result->decode_type)) {
+#if DECODE_AC
+    for (uint16_t i = 0; result->bits > i * 8; i++) {
+      if (result->state[i] < 0x10) output += '0';  // Zero pad
+      output += result->state[i];
+    }
+#endif  // DECODE_AC
+  } else {
+    output += result->value;
+  }
+  return output;
+} */
 
 /// Dump out the decode_results structure into a human readable format.
 /// @param[in] results A ptr to a decode_results structure.
@@ -541,12 +556,6 @@ namespace irutils {
           case panasonic_ac_remote_model_t::kPanasonicJke: return F("JKE");
           case panasonic_ac_remote_model_t::kPanasonicCkp: return F("CKP");
           case panasonic_ac_remote_model_t::kPanasonicRkr: return F("RKR");
-          default: return kUnknownStr;
-        }
-        break;
-      case decode_type_t::VOLTAS:
-        switch (model) {
-          case voltas_ac_remote_model_t::kVoltas122LZF: return F("122LZF");
           default: return kUnknownStr;
         }
         break;
@@ -953,58 +962,5 @@ namespace irutils {
       if (*(ptr + i) != inv) return false;
     }
     return true;
-  }
-
-  /// Perform a low lovel bit manipulation sanity check for the given cpu
-  /// architecture and the compiler operation. Calls to this should return
-  /// 0 if everything is as expected, anything else means the library won't work
-  /// as expected.
-  /// @return A bit mask value of potential issues.
-  ///   0: (e.g. 0b00000000) Everything appears okay.
-  ///   0th bit set: (0b1) Unexpected bit field/packing encountered.
-  ///                Try a different compiler.
-  ///   1st bit set: (0b10) Unexpected Endianness. Try a different compiler flag
-  ///                or use a CPU different architecture.
-  ///  e.g. A result of 3 (0b11) would mean both a bit field and an Endianness
-  ///       issue has been found.
-  uint8_t lowLevelSanityCheck(void) {
-    const uint64_t kExpectedBitFieldResult = 0x8000012340000039ULL;
-    volatile uint32_t EndianTest = 0x12345678;
-    const uint8_t kBitFieldError =   0b01;
-    const uint8_t kEndiannessError = 0b10;
-    uint8_t result = 0;
-    union bitpackdata {
-      struct {
-        uint64_t lowestbit:1;     // 0th bit
-        uint64_t next7bits:7;     // 1-7th bits
-        uint64_t _unused_1:20;    // 8-27th bits
-        // Cross the 32 bit boundary.
-        uint64_t crossbits:16;    // 28-43rd bits
-        uint64_t _usused_2:18;    // 44-61st bits
-        uint64_t highest2bits:2;  // 62-63rd bits
-      };
-     uint64_t all;
-    };
-
-    bitpackdata data;
-    data.lowestbit = true;
-    data.next7bits = 0b0011100;  // 0x1C
-    data._unused_1 = 0;
-    data.crossbits = 0x1234;
-    data._usused_2 = 0;
-    data.highest2bits = 0b10;  // 2
-
-    if (data.all != kExpectedBitFieldResult) result |= kBitFieldError;
-    // Check that we are using Little Endian for integers
-#if defined(BYTE_ORDER) && defined(LITTLE_ENDIAN)
-    if (BYTE_ORDER != LITTLE_ENDIAN) result |= kEndiannessError;
-#endif
-#if defined(__IEEE_BIG_ENDIAN) || defined(__IEEE_BYTES_BIG_ENDIAN)
-    result |= kEndiannessError;
-#endif
-    // Brute force check for little endian.
-    if (*((uint8_t*)(&EndianTest)) != 0x78)  // NOLINT(readability/casting)
-      result |= kEndiannessError;
-    return result;
   }
 }  // namespace irutils

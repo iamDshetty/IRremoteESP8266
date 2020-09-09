@@ -27,7 +27,6 @@ extern const char* kBreezeStr;
 extern const char* kButtonStr;
 extern const char* kCancelStr;
 extern const char* kCeilingStr;
-extern const char* kCelsiusFahrenheitStr;
 extern const char* kCelsiusStr;
 extern const char* kCentreStr;
 extern const char* kChangeStr;

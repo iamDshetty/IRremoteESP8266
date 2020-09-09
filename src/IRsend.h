@@ -118,7 +118,7 @@ namespace stdAc {
 
 /// Fujitsu A/C model numbers
 enum fujitsu_ac_remote_model_t {
-  ARRAH2E = 1,  // (1) AR-RAH2E, AR-RAC1E, AR-RAE1E, AR-RCE1E (Default)
+  ARRAH2E = 1,  // (1) AR-RAH2E, AR-RAC1E, AR-RAE1E (Default)
   ARDB1,        // (2) AR-DB1, AR-DL10 (AR-DL10 swing doesn't work)
   ARREB1E,      // (3) AR-REB1E
   ARJW2,        // (4) AR-JW2  (Same as ARDB1 but with horiz control)
@@ -146,12 +146,6 @@ enum panasonic_ac_remote_model_t {
   kPanasonicJke = 4,
   kPanasonicCkp = 5,
   kPanasonicRkr = 6,
-};
-
-/// Voltas A/C model numbers
-enum voltas_ac_remote_model_t {
-  kVoltasUnknown = 0,  // Full Function
-  kVoltas122LZF = 1,   // (1) 122LZF (No SwingH support) (Default)
 };
 
 /// Whirlpool A/C model numbers
@@ -631,10 +625,6 @@ class IRsend {
                          const uint16_t nbits = kMultibracketsBits,
                          const uint16_t repeat = kMultibracketsDefaultRepeat);
 #endif
-#if SEND_TECHNIBEL_AC
-  void sendTechnibelAc(uint64_t data, uint16_t nbits = kTechnibelAcBits,
-                       uint16_t repeat = kTechnibelAcDefaultRepeat);
-#endif
 #if SEND_CORONA_AC
   void sendCoronaAc(const uint8_t data[],
                     const uint16_t nbytes = kCoronaAcStateLength,
@@ -644,24 +634,13 @@ class IRsend {
   void sendZepeal(const uint64_t data,
                   const uint16_t nbits = kZepealBits,
                   const uint16_t repeat = kZepealMinRepeat);
-#endif  // SEND_ZEPEAL
-#if SEND_VOLTAS
-  void sendVoltas(const unsigned char data[],
-                       const uint16_t nbytes = kVoltasStateLength,
-                       const uint16_t repeat = kNoRepeat);
-#endif  // SEND_VOLTAS
-#if SEND_METZ
-  void sendMetz(const uint64_t data,
-                const uint16_t nbits = kMetzBits,
-                const uint16_t repeat = kMetzMinRepeat);
-  static uint32_t encodeMetz(const uint8_t address, const uint8_t command,
-                             const bool toggle = false);
-#endif  // SEND_METZ
-#if SEND_TRANSCOLD
-  void sendTranscold(const uint64_t data, const uint16_t nbits = kTranscoldBits,
-                     const uint16_t repeat = kNoRepeat);
-#endif  // SEND_TRANSCOLD
+#endif
 
+
+#if SEND_TRANSCOLD
+ void sendTranscold(uint64_t data, uint16_t nbits = kTranscoldBits,
+                  uint16_t repeat = kTranscoldDefaultRepeat);
+#endif  // SEND_TRANSCOLD
  protected:
 #ifdef UNIT_TEST
 #ifndef HIGH
@@ -692,6 +671,10 @@ class IRsend {
   void _sendSony(const uint64_t data, const uint16_t nbits,
                  const uint16_t repeat, const uint16_t freq);
 #endif  // SEND_SONY
+
+
+
+
 };
 
 #endif  // IRSEND_H_
