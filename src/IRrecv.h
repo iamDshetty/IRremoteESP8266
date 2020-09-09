@@ -262,12 +262,6 @@ class IRrecv {
                            const bool GEThomas = true);
   void crudeNoiseFilter(decode_results *results, const uint16_t floor = 0);
   bool decodeHash(decode_results *results);
-#if DECODE_VOLTAS
-  bool decodeVoltas(decode_results *results,
-                         uint16_t offset = kStartOffset,
-                         const uint16_t nbits = kVoltasBits,
-                         const bool strict = true);
-#endif  // DECODE_VOLTAS
 #if (DECODE_NEC || DECODE_SHERWOOD || DECODE_AIWA_RC_T501 || DECODE_SANYO)
   bool decodeNEC(decode_results *results, uint16_t offset = kStartOffset,
                  const uint16_t nbits = kNECBits, const bool strict = true);
@@ -663,12 +657,6 @@ class IRrecv {
                            const uint16_t nbits = kMultibracketsBits,
                            const bool strict = true);
 #endif  // DECODE_MULTIBRACKETS
-#if DECODE_TECHNIBEL_AC
-  bool decodeTechnibelAc(decode_results *results,
-                         uint16_t offset = kStartOffset,
-                         const uint16_t nbits = kTechnibelAcBits,
-                         const bool strict = true);
-#endif  // DECODE_TECHNIBEL_AC
 #if DECODE_CORONA_AC
   bool decodeCoronaAc(decode_results *results, uint16_t offset = kStartOffset,
                       const uint16_t nbits = kCoronaAcBitsShort,
@@ -679,16 +667,14 @@ bool decodeZepeal(decode_results *results, uint16_t offset = kStartOffset,
                   const uint16_t nbits = kZepealBits,
                   const bool strict = true);
 #endif  // DECODE_ZEPEAL
-#if DECODE_METZ
-bool decodeMetz(decode_results *results, uint16_t offset = kStartOffset,
-                const uint16_t nbits = kMetzBits,
-                const bool strict = true);
-#endif  // DECODE_METZ
+
 #if DECODE_TRANSCOLD
-bool decodeTranscold(decode_results *results, uint16_t offset = kStartOffset,
-                     const uint16_t nbits = kTranscoldBits,
-                     const bool strict = true);
+  bool decodeTranscold(decode_results *results,
+                         uint16_t offset = kStartOffset,
+                         const uint16_t nbits = kTranscoldBits,
+                         const bool strict = true);
 #endif  // DECODE_TRANSCOLD
+
 };
 
 #endif  // IRRECV_H_

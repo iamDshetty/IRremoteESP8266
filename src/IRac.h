@@ -32,13 +32,12 @@
 #include "ir_Sanyo.h"
 #include "ir_Sharp.h"
 #include "ir_Tcl.h"
-#include "ir_Technibel.h"
 #include "ir_Teco.h"
 #include "ir_Toshiba.h"
 #include "ir_Trotec.h"
 #include "ir_Vestel.h"
-#include "ir_Voltas.h"
 #include "ir_Whirlpool.h"
+#include "ir_Transcold.h"
 
 // Constants
 const int8_t kGpioUnused = -1;  ///< A placeholder for not using an actual GPIO.
@@ -219,7 +218,7 @@ void electra(IRElectraAc *ac,
                const stdAc::fanspeed_t fan,
                const stdAc::swingv_t swingv, const stdAc::swingh_t swingh,
                const bool quiet, const bool turbo, const bool econo,
-               const bool filter, const bool clean, const int16_t sleep = -1);
+               const bool filter, const bool clean);
 #endif  // SEND_FUJITSU_AC
 #if SEND_GOODWEATHER
   void goodweather(IRGoodweatherAc *ac,
@@ -339,11 +338,10 @@ void electra(IRElectraAc *ac,
 #endif  // SEND_MITSUBISHIHEAVY
 #if SEND_NEOCLIMA
   void neoclima(IRNeoclimaAc *ac, const bool on, const stdAc::opmode_t mode,
-                const bool celsius, const float degrees,
-                const stdAc::fanspeed_t fan,
+                const float degrees, const stdAc::fanspeed_t fan,
                 const stdAc::swingv_t swingv, const stdAc::swingh_t swingh,
-                const bool turbo, const bool econo, const bool light,
-                const bool filter, const int16_t sleep = -1);
+                const bool turbo, const bool light, const bool filter,
+                const int16_t sleep = -1);
 #endif  // SEND_NEOCLIMA
 #if SEND_PANASONIC_AC
   void panasonic(IRPanasonicAc *ac, const panasonic_ac_remote_model_t model,
@@ -383,12 +381,6 @@ void electra(IRElectraAc *ac,
               const bool turbo, const bool light, const bool econo,
               const bool filter);
 #endif  // SEND_TCL112AC
-#if SEND_TECHNIBEL_AC
-  void technibel(IRTechnibelAc *ac,
-            const bool on, const stdAc::opmode_t mode, const bool celsius,
-            const float degrees, const stdAc::fanspeed_t fan,
-            const stdAc::swingv_t swingv, const int16_t sleep = -1);
-#endif  // SEND_TECHNIBEL_AC
 #if SEND_TECO
   void teco(IRTecoAc *ac,
             const bool on, const stdAc::opmode_t mode, const float degrees,
@@ -414,14 +406,6 @@ void electra(IRElectraAc *ac,
               const int16_t sleep = -1, const int16_t clock = -1,
               const bool sendNormal = true);
 #endif  // SEND_VESTEL_AC
-#if SEND_VOLTAS
-  void voltas(IRVoltas *ac, const voltas_ac_remote_model_t model,
-              const bool on, const stdAc::opmode_t mode,
-              const float degrees, const stdAc::fanspeed_t fan,
-              const stdAc::swingv_t swingv, const stdAc::swingh_t swingh,
-              const bool turbo, const bool econo, const bool light,
-              const int16_t sleep = -1);
-#endif  // SEND_VOLTAS
 #if SEND_WHIRLPOOL_AC
   void whirlpool(IRWhirlpoolAc *ac, const whirlpool_ac_remote_model_t model,
                  const bool on, const stdAc::opmode_t mode, const float degrees,
@@ -429,6 +413,14 @@ void electra(IRElectraAc *ac,
                  const bool turbo, const bool light,
                  const int16_t sleep = -1, const int16_t clock = -1);
 #endif  // SEND_WHIRLPOOL_AC
+#if SEND_TRANSCOLD
+  void Transcold(IRTranscoldAC *ac,
+              const bool on, const stdAc::opmode_t mode, const float degrees,
+              const stdAc::fanspeed_t fan,
+              const stdAc::swingv_t swingv, const stdAc::swingh_t swingh,
+              const bool turbo, const bool light, const bool clean,
+              const int16_t sleep = -1);
+#endif  // SEND_TRANSCOLD
 static stdAc::state_t cleanState(const stdAc::state_t state);
 static stdAc::state_t handleToggles(const stdAc::state_t desired,
                                     const stdAc::state_t *prev = NULL);

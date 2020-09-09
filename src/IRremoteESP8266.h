@@ -52,7 +52,7 @@
 #endif  // UNIT_TEST
 
 // Library Version
-#define _IRREMOTEESP8266_VERSION_ "2.7.10"
+#define _IRREMOTEESP8266_VERSION_ "2.7.9"
 
 // Set the language & locale for the library. See the `locale` dir for options.
 #ifndef _IR_LOCALE_
@@ -656,13 +656,6 @@
 #define SEND_MULTIBRACKETS     _IR_ENABLE_DEFAULT_
 #endif  // SEND_MULTIBRACKETS
 
-#ifndef DECODE_TECHNIBEL_AC
-#define DECODE_TECHNIBEL_AC     _IR_ENABLE_DEFAULT_
-#endif  // DECODE_TECHNIBEL_AC
-#ifndef SEND_TECHNIBEL_AC
-#define SEND_TECHNIBEL_AC       _IR_ENABLE_DEFAULT_
-#endif  // SEND_TECHNIBEL_AC
-
 #ifndef DECODE_CORONA_AC
 #define DECODE_CORONA_AC       _IR_ENABLE_DEFAULT_
 #endif  // DECODE_CORONA_AC
@@ -677,25 +670,13 @@
 #define SEND_ZEPEAL            _IR_ENABLE_DEFAULT_
 #endif  // SEND_ZEPEAL
 
-#ifndef DECODE_VOLTAS
-#define DECODE_VOLTAS          _IR_ENABLE_DEFAULT_
-#endif  // DECODE_VOLTAS
-#ifndef SEND_VOLTAS
-#define SEND_VOLTAS            _IR_ENABLE_DEFAULT_
-#endif  // SEND_VOLTAS
 
-#ifndef DECODE_METZ
-#define DECODE_METZ            _IR_ENABLE_DEFAULT_
-#endif  // DECODE_METZ
-#ifndef SEND_METZ
-#define SEND_METZ              _IR_ENABLE_DEFAULT_
-#endif  // SEND_METZ
-
+//#define SEND_TRANSCOLD true
 #ifndef DECODE_TRANSCOLD
-#define DECODE_TRANSCOLD       _IR_ENABLE_DEFAULT_
+#define DECODE_TRANSCOLD         _IR_ENABLE_DEFAULT_
 #endif  // DECODE_TRANSCOLD
 #ifndef SEND_TRANSCOLD
-#define SEND_TRANSCOLD         _IR_ENABLE_DEFAULT_
+#define SEND_TRANSCOLD           _IR_ENABLE_DEFAULT_
 #endif  // SEND_TRANSCOLD
 
 #if (DECODE_ARGO || DECODE_DAIKIN || DECODE_FUJITSU_AC || DECODE_GREE || \
@@ -709,8 +690,7 @@
      DECODE_NEOCLIMA || DECODE_DAIKIN176 || DECODE_DAIKIN128 || \
      DECODE_AMCOR || DECODE_DAIKIN152 || DECODE_MITSUBISHI136 || \
      DECODE_MITSUBISHI112 || DECODE_HITACHI_AC424 || DECODE_HITACHI_AC3 || \
-     DECODE_HITACHI_AC344 || DECODE_CORONA_AC || DECODE_SANYO_AC || \
-     DECODE_VOLTAS)
+     DECODE_HITACHI_AC344 || DECODE_CORONA_AC || DECODE_SANYO_AC)
   // Add any DECODE to the above if it uses result->state (see kStateSizeMax)
   // you might also want to add the protocol to hasACState function
 #define DECODE_AC true  // We need some common infrastructure for decoding A/Cs.
@@ -839,12 +819,9 @@ enum decode_type_t {
   MIDEA24,
   ZEPEAL,
   SANYO_AC,
-  VOLTAS,  // 90
-  METZ,
-  TRANSCOLD,
-  TECHNIBEL_AC,
+  TRANSCOLD, //90
   // Add new entries before this one, and update it to point to the last entry.
-  kLastDecodeType = TECHNIBEL_AC,
+  kLastDecodeType = TRANSCOLD,
 };
 
 // Message lengths & required repeat values
@@ -901,8 +878,6 @@ const uint16_t kDaikin216Bits = kDaikin216StateLength * 8;
 const uint16_t kDaikin216DefaultRepeat = kNoRepeat;
 const uint16_t kDelonghiAcBits = 64;
 const uint16_t kDelonghiAcDefaultRepeat = kNoRepeat;
-const uint16_t kTechnibelAcBits = 56;
-const uint16_t kTechnibelAcDefaultRepeat = kNoRepeat;
 const uint16_t kDenonBits = 15;
 const uint16_t kDenon48Bits = 48;
 const uint16_t kDenonLegacyBits = 14;
@@ -962,8 +937,6 @@ const uint16_t kLg32Bits = 32;
 const uint16_t kLgDefaultRepeat = kNoRepeat;
 const uint16_t kLutronBits = 35;
 const uint16_t kMagiquestBits = 56;
-const uint16_t kMetzBits = 19;
-const uint16_t kMetzMinRepeat = kNoRepeat;
 const uint16_t kMideaBits = 48;
 const uint16_t kMideaMinRepeat = kNoRepeat;
 const uint16_t kMidea24Bits = 24;
@@ -1050,7 +1023,6 @@ const uint16_t kToshibaACStateLengthShort = kToshibaACStateLength - 2;
 const uint16_t kToshibaACBitsShort = kToshibaACStateLengthShort * 8;
 const uint16_t kToshibaACStateLengthLong = kToshibaACStateLength + 1;
 const uint16_t kToshibaACBitsLong = kToshibaACStateLengthLong * 8;
-const uint16_t kTranscoldBits = 48;
 const uint16_t kTrotecStateLength = 9;
 const uint16_t kTrotecBits = kTrotecStateLength * 8;
 const uint16_t kTrotecDefaultRepeat = kNoRepeat;
@@ -1061,9 +1033,8 @@ const uint16_t kWhynterBits = 32;
 const uint8_t  kVestelAcBits = 56;
 const uint16_t kZepealBits = 16;
 const uint16_t kZepealMinRepeat = 4;
-const uint16_t kVoltasBits = 80;
-const uint16_t kVoltasStateLength = 10;
-
+const uint16_t kTranscoldBits =24; // 
+const uint16_t kTranscoldDefaultRepeat = kNoRepeat; 
 
 // Legacy defines. (Deprecated)
 #define AIWA_RC_T501_BITS             kAiwaRcT501Bits
@@ -1118,7 +1089,7 @@ const uint16_t kVoltasStateLength = 10;
 #define TOSHIBA_AC_STATE_LENGTH       kToshibaACStateLength
 #define TROTEC_COMMAND_LENGTH         kTrotecStateLength
 #define WHYNTER_BITS                  kWhynterBits
-
+#define TRANSCOLD_BITS                kTranscoldBits
 // Turn on Debugging information by uncommenting the following line.
 // #define DEBUG 1
 
